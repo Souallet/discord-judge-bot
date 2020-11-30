@@ -10,8 +10,6 @@ module.exports = (client) => {
     // Import event
     const event = require(`../events/${file}`);
 
-    console.log("event", event);
-
     // Validate event
     if (!event.execute)
       throw new TypeError(

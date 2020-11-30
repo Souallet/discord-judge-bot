@@ -6,4 +6,12 @@ module.exports = {
   commands: {
     blacklist: ["ban", "unban", "kick"],
   },
+  votes: {
+    min: 3,
+    time: 60000,
+    emojis: {
+      pro: "👍",
+      con: "👎",
+    },
+  },
 };
