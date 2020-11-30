@@ -1,4 +1,5 @@
 const { readdirSync } = require("fs");
+const Config = require("../config/config");
 
 module.exports = (client) => {
   // Getting all command files
@@ -23,6 +24,12 @@ module.exports = (client) => {
 
     if (cmd.name.trim() === "")
       throw new TypeError(`[ERROR][COMMANDS]: name cannot be empty! (${file})`);
+
+    // Check if command is blacklisted
+    if (Config.commands.blacklist.includes(cmd.name)) {
+      console.warn(`[WARNING][COMMANDS]: Command: ${cmd.name} is blacklisted.`);
+      return; // Continue to the next iteration
+    }
 
     // if (!cmd.category)
     //   console.warn(
