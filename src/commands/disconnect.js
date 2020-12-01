@@ -1,7 +1,10 @@
 module.exports = {
   name: "disconnect",
   description: "Déconnecte une personne du channel vocal !",
-  execute(message, args) {
+  message($askingUsername, $targetUsername) {
+    return `${$askingUsername} souhaite déconnecter ${$targetUsername}.`;
+  },
+  execute(client, message, args) {
     const mentionnedMember = message.mentions.members.first();
 
     mentionnedMember.voice

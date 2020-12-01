@@ -1,7 +1,10 @@
 module.exports = {
   name: "undeafen",
   description: "Rend l'ouïe à un utilisateur !",
-  execute(message, args) {
+  message($askingUsername, $targetUsername) {
+    return `${$askingUsername} souhaite rendre l'ouïe à ${$targetUsername}.`;
+  },
+  execute(client, message, args) {
     const mentionnedMember = message.mentions.members.first();
 
     mentionnedMember.voice

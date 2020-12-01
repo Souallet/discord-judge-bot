@@ -1,7 +1,10 @@
 module.exports = {
   name: "ban",
   description: "Bannie un utilisateur du serveur !",
-  execute(message, args) {
+  message($askingUsername, $targetUsername) {
+    return `${$askingUsername} souhaite bannir ${$targetUsername}.`;
+  },
+  execute(client, message, args) {
     const mentionnedMember = message.mentions.members.first();
 
     if (!mentionnedMember.bannable)

@@ -1,7 +1,10 @@
 module.exports = {
   name: "unban",
   description: "Supprime un utilisateur de la liste des bannis !",
-  execute(message, args) {
+  message($askingUsername, $targetUsername) {
+    return `${$askingUsername} souhaite débannir ${$targetUsername}.`;
+  },
+  execute(client, message, args) {
     const mentionnedMember = message.mentions.members.first();
 
     if (!mentionnedMember.bannable)

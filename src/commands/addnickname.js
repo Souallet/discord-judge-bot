@@ -1,7 +1,10 @@
 module.exports = {
   name: "add-nickname",
   description: "Attribut un surnom à un utilisateur !",
-  execute(message, args) {
+  message($askingUsername, $targetUsername, args) {
+    return `${$askingUsername} souhaite renommer ${$targetUsername} en "${args[1]}".`;
+  },
+  execute(client, message, args) {
     const mentionnedMember = message.mentions.members.first();
     const newNickname = args[1];
 

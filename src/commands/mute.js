@@ -1,7 +1,10 @@
 module.exports = {
   name: "mute",
   description: "Rend une personne muette !",
-  execute(message, args) {
+  message($askingUsername, $targetUsername) {
+    return `${$askingUsername} souhaite rendre muet ${$targetUsername}.`;
+  },
+  execute(client, message, args) {
     const mentionnedMember = message.mentions.members.first();
 
     mentionnedMember.voice

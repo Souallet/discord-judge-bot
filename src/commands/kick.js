@@ -1,7 +1,10 @@
 module.exports = {
   name: "kick",
   description: "Exclus une personne du serveur !",
-  execute(message, args) {
+  message($askingUsername, $targetUsername) {
+    return `${$askingUsername} souhaite exclure ${$targetUsername}.`;
+  },
+  execute(client, message, args) {
     const mentionnedMember = message.mentions.members.first();
 
     if (!mentionnedMember.kickable)

@@ -1,3 +1,5 @@
+const Discord = require("discord.js");
+
 const Config = require("../config/config");
 
 module.exports = {
@@ -19,6 +21,9 @@ module.exports = {
     const cmd = client.commands.get(COMMAND);
     if (!cmd) message.channel.send("Commande introuvable.");
 
+    // Si on demande l'aide
+    if (cmd.name == "help") return cmd.execute(client, message, args);
+
     // Si des paramètres sont passés
     if (args.length === 0) {
       return message.reply("Veuillez identifier un utilisateur et la raison.");
@@ -28,10 +33,28 @@ module.exports = {
     const mentionnedMember = message.mentions.members.first();
     if (!mentionnedMember) message.channel.send("Utilisateur introuvable.");
 
+    console.log(message.author);
+    console.log(mentionnedMember);
+
+    // Vote de message embeded
+    const voteMessage = new Discord.MessageEmbed()
+      .setColor(Config.client.color)
+      .setTitle(`Un jugement à été demandé.`)
+      .setAuthor("Judge Bot")
+      .setDescription(`Description de la commande : ${cmd.description}`)
+      .addField(
+        cmd.message(
+          message.author.username,
+          mentionnedMember.user.username,
+          args
+        ),
+        `Raison : Indisponible pour le moment.`
+      )
+      .setThumbnail(Config.client.image)
+      .setTimestamp();
+
     // Envoie le message de vote
-    sentMessage = await message.channel.send(
-      `${message.author} souhaite ${cmd.description} à ${mentionnedMember}`
-    );
+    sentMessage = await message.channel.send(voteMessage);
 
     // Ajoute les options de vote
     sentMessage.react(Config.votes.emojis.pro);
@@ -60,7 +83,7 @@ module.exports = {
         } else {
           if (totalPros > totalCons) {
             // Execute la commande
-            cmd.execute(message, args);
+            cmd.execute(client, message, args);
           } else {
             message.reply("L'action ne sera pas exécuté.");
           }

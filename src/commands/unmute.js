@@ -1,7 +1,10 @@
 module.exports = {
   name: "unmute",
   description: "Rend la parole à un utilisateur !",
-  execute(message, args) {
+  message($askingUsername, $targetUsername) {
+    return `${$askingUsername} souhaite rendre la parole à ${$targetUsername}.`;
+  },
+  execute(client, message, args) {
     const mentionnedMember = message.mentions.members.first();
 
     mentionnedMember.voice

@@ -1,7 +1,10 @@
 module.exports = {
   name: "remove-nickname",
   description: "Supprime le surnom attribué à un utilisateur !",
-  execute(message, args) {
+  message($askingUsername, $targetUsername) {
+    return `${$askingUsername} souhaite enlever le surnom de ${$targetUsername}.`;
+  },
+  execute(client, message, args) {
     const mentionnedMember = message.mentions.members.first();
     mentionnedMember
       .setNickname("", "La communauté t'a enlevé ton surnom.")
