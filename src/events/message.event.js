@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 const Config = require("../config/config");
-
+const { msToTime } = require("../utils/helpers/time.helper");
+const { updateCountdown } = require("../utils/helpers/message.helper");
 module.exports = {
   name: "message",
   async execute(client, message) {
@@ -46,13 +47,29 @@ module.exports = {
       .attachFiles(attachments)
       .setAuthor("Judge Bot", "attachment://judge.png")
       .setDescription(`Description de la commande : ${cmd.description}`)
-      .addField(
-        cmd.message(
-          message.author.username,
-          mentionnedMember.user.username,
-          args
-        ),
-        `Raison : Indisponible pour le moment.`
+      .addFields(
+        {
+          name: cmd.message(
+            message.author.username,
+            mentionnedMember.user.username,
+            args
+          ),
+          value: `Raison : Indisponible pour le moment.`,
+        },
+        {
+          name: `Temps restant :`,
+          value: msToTime(Config.votes.duration),
+        },
+        {
+          name: `(${Config.votes.emojis.pro}) À voté pour :`,
+          value: "Personne n'a voté pour.",
+          inline: true,
+        },
+        {
+          name: `(${Config.votes.emojis.con}) À voté contre :`,
+          value: "Personne n'a voté pour.",
+          inline: true,
+        }
       )
       .setThumbnail("attachment://judge_gavel.png")
       .setTimestamp();
@@ -64,9 +81,14 @@ module.exports = {
     sentMessage.react(Config.votes.emojis.pro);
     sentMessage.react(Config.votes.emojis.con);
 
-    // setInterval(() => {
-    //   console.log(sentMessage);
-    // }, 10000);
+    let timeLeft = Config.votes.duration;
+
+    updateCountdown(voteMessage, sentMessage, timeLeft);
+    let countdown = setInterval(() => {
+      timeLeft -= 2000;
+      updateCountdown(voteMessage, sentMessage, timeLeft);
+      if (timeLeft == 0) clearInterval(countdown);
+    }, 2000);
 
     const filter = (reaction, user) => {
       return (
@@ -81,7 +103,24 @@ module.exports = {
     });
 
     collector.on("collect", (reaction, user) => {
-      console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
+      if (reaction.emoji.name === Config.votes.emojis.pro) {
+        let embedProField = Object.assign({}, voteMessage.fields[2]);
+        if (reaction.count - 1 == 1) {
+          embedProField.value = user.username;
+        } else {
+          embedProField.value += `, ${user.username}`;
+        }
+        voteMessage.spliceFields(2, 1, embedProField);
+      } else {
+        let embedConField = Object.assign({}, voteMessage.fields[3]);
+        if (reaction.count - 1 == 1) {
+          embedConField.value = user.username;
+        } else {
+          embedConField.value += `, ${user.username}`;
+        }
+        voteMessage.spliceFields(3, 1, embedConField);
+      }
+      sentMessage.edit(voteMessage);
     });
 
     collector.on("end", (collected) => {
