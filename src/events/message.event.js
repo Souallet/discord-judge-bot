@@ -1,5 +1,4 @@
 const Discord = require("discord.js");
-
 const Config = require("../config/config");
 
 module.exports = {
@@ -33,14 +32,19 @@ module.exports = {
     const mentionnedMember = message.mentions.members.first();
     if (!mentionnedMember) message.channel.send("Utilisateur introuvable.");
 
-    console.log(message.author);
-    console.log(mentionnedMember);
+    // Image locales jointes
+    let attachments = [];
+    attachments.push(
+      new Discord.MessageAttachment(Config.client.image, "judge.png"),
+      new Discord.MessageAttachment(Config.judgement.image, "judge_gavel.png")
+    );
 
     // Vote de message embeded
     const voteMessage = new Discord.MessageEmbed()
       .setColor(Config.client.color)
       .setTitle(`Un jugement à été demandé.`)
-      .setAuthor("Judge Bot")
+      .attachFiles(attachments)
+      .setAuthor("Judge Bot", "attachment://judge.png")
       .setDescription(`Description de la commande : ${cmd.description}`)
       .addField(
         cmd.message(
@@ -50,7 +54,7 @@ module.exports = {
         ),
         `Raison : Indisponible pour le moment.`
       )
-      .setThumbnail(Config.client.image)
+      .setThumbnail("attachment://judge_gavel.png")
       .setTimestamp();
 
     // Envoie le message de vote
@@ -60,6 +64,10 @@ module.exports = {
     sentMessage.react(Config.votes.emojis.pro);
     sentMessage.react(Config.votes.emojis.con);
 
+    // setInterval(() => {
+    //   console.log(sentMessage);
+    // }, 10000);
+
     const filter = (reaction, user) => {
       return (
         [Config.votes.emojis.pro, Config.votes.emojis.con].includes(
@@ -68,30 +76,31 @@ module.exports = {
       );
     };
 
-    sentMessage
-      .awaitReactions(filter, { time: Config.votes.time })
-      .then((collected) => {
+    const collector = sentMessage.createReactionCollector(filter, {
+      time: Config.votes.duration,
+    });
+
+    collector.on("collect", (reaction, user) => {
+      console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
+    });
+
+    collector.on("end", (collected) => {
+      if (collected.size < Config.votes.min) {
+        message.reply("Il n'y a pas eu assez de votes.");
+      } else {
         const pros = collected.get(Config.votes.emojis.pro);
         const cons = collected.get(Config.votes.emojis.con);
-
         const totalPros = typeof pros !== "undefined" ? pros.count : 1;
         const totalCons = typeof cons !== "undefined" ? cons.count : 1;
-        const total = totalPros + totalCons - 2;
 
-        if (total < Config.votes.min) {
-          message.reply("Il n'y a pas eu assez de votes.");
+        if (totalPros > totalCons) {
+          cmd.execute(client, message, args);
         } else {
-          if (totalPros > totalCons) {
-            // Execute la commande
-            cmd.execute(client, message, args);
-          } else {
-            message.reply("L'action ne sera pas exécuté.");
-          }
+          message.reply(
+            "L'action ne sera pas exécutée, trop d'utilisateurs sont contre."
+          );
         }
-      })
-      .catch((err) => {
-        message.reply("Une erreur s'est produite.");
-        console.log(`Une erreur s'est produite ${err}`);
-      });
+      }
+    });
   },
 };
