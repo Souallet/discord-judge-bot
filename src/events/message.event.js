@@ -71,7 +71,7 @@ module.exports = {
         },
         {
           name: `(${Config.votes.emojis.con}) À voté contre :`,
-          value: "Personne n'a voté pour.",
+          value: "Personne n'a voté contre.",
           inline: true,
         }
       )
@@ -89,10 +89,10 @@ module.exports = {
 
     updateCountdown(voteMessage, sentMessage, timeLeft);
     let countdown = setInterval(() => {
-      timeLeft -= 2000;
+      timeLeft -= 1000;
       updateCountdown(voteMessage, sentMessage, timeLeft);
       if (timeLeft == 0) clearInterval(countdown);
-    }, 2000);
+    }, 1000);
 
     const filter = (reaction, user) => {
       return (
@@ -103,6 +103,7 @@ module.exports = {
     };
 
     const collector = sentMessage.createReactionCollector(filter, {
+      dispose: true,
       time: Config.votes.duration,
     });
 
@@ -121,6 +122,33 @@ module.exports = {
           embedConField.value = user.username;
         } else {
           embedConField.value += `, ${user.username}`;
+        }
+        voteMessage.spliceFields(3, 1, embedConField);
+      }
+      sentMessage.edit(voteMessage);
+    });
+
+    collector.on("remove", (reaction, user) => {
+      if (reaction.emoji.name === Config.votes.emojis.pro) {
+        let embedProField = Object.assign({}, voteMessage.fields[2]);
+        if (reaction.count == 1) {
+          embedProField.value = "Personne n'a voté pour.";
+        } else {
+          embedProField.value = embedProField.value
+            .split(", ")
+            .filter((v) => v != user.username)
+            .join(", ");
+        }
+        voteMessage.spliceFields(2, 1, embedProField);
+      } else {
+        let embedConField = Object.assign({}, voteMessage.fields[3]);
+        if (reaction.count == 1) {
+          embedConField.value = "Personne n'a voté contre.";
+        } else {
+          embedConField.value = embedConField.value
+            .split(", ")
+            .filter((v) => v != user.username)
+            .join(", ");
         }
         voteMessage.spliceFields(3, 1, embedConField);
       }
