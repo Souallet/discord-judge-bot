@@ -1,5 +1,6 @@
 module.exports = {
   name: "kick",
+  args: "@{nom d'utilisateur} {raison du vote}",
   description: "Exclus une personne du serveur !",
   message($askingUsername, $targetUsername) {
     return `${$askingUsername} souhaite exclure ${$targetUsername}.`;

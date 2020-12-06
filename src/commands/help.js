@@ -3,6 +3,7 @@ const Config = require("../config/config");
 
 module.exports = {
   name: "help",
+  args: "",
   description: "Liste les commandes utilisables.",
   execute(client, message, args) {
     let attachments = [];
@@ -23,7 +24,7 @@ module.exports = {
 
     client.commands.forEach((command) => {
       messageEmbed.addFields({
-        name: command.name,
+        name: `${command.name} ${command.args}`,
         value: command.description,
         inline: false,
       });

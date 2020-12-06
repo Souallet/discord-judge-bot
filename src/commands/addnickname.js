@@ -1,5 +1,6 @@
 module.exports = {
   name: "add-nickname",
+  args: "@{nom d'utilisateur} {raison du vote}",
   description: "Attribut un surnom à un utilisateur !",
   message($askingUsername, $targetUsername, args) {
     return `${$askingUsername} souhaite renommer ${$targetUsername} en "${args[1]}".`;

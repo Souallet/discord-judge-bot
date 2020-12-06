@@ -1,5 +1,6 @@
 module.exports = {
   name: "disconnect",
+  args: "@{nom d'utilisateur} {raison du vote}",
   description: "Déconnecte une personne du channel vocal !",
   message($askingUsername, $targetUsername) {
     return `${$askingUsername} souhaite déconnecter ${$targetUsername}.`;

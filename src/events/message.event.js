@@ -33,6 +33,10 @@ module.exports = {
     const mentionnedMember = message.mentions.members.first();
     if (!mentionnedMember) message.channel.send("Utilisateur introuvable.");
 
+    // Récupère la raison
+    const reason =
+      args.slice(1).join(" ").concat(".") || "Indisponible pour le moment.";
+
     // Image locales jointes
     let attachments = [];
     attachments.push(
@@ -54,7 +58,7 @@ module.exports = {
             mentionnedMember.user.username,
             args
           ),
-          value: `Raison : Indisponible pour le moment.`,
+          value: `Raison : ${reason}`,
         },
         {
           name: `Temps restant :`,

@@ -1,5 +1,6 @@
 module.exports = {
   name: "remove-nickname",
+  args: "@{nom d'utilisateur} {raison du vote}",
   description: "Supprime le surnom attribué à un utilisateur !",
   message($askingUsername, $targetUsername) {
     return `${$askingUsername} souhaite enlever le surnom de ${$targetUsername}.`;

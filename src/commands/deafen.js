@@ -1,5 +1,6 @@
 module.exports = {
   name: "deafen",
+  args: "@{nom d'utilisateur} {raison du vote}",
   description: "Rend une personne sourde !",
   message($askingUsername, $targetUsername) {
     return `${$askingUsername} souhaite rendre sourd ${$targetUsername}.`;

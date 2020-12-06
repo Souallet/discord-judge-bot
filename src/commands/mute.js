@@ -1,5 +1,6 @@
 module.exports = {
   name: "mute",
+  args: "@{nom d'utilisateur} {raison du vote}",
   description: "Rend une personne muette !",
   message($askingUsername, $targetUsername) {
     return `${$askingUsername} souhaite rendre muet ${$targetUsername}.`;

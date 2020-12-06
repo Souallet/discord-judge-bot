@@ -1,5 +1,6 @@
 module.exports = {
   name: "ban",
+  args: "@{nom d'utilisateur} {raison du vote}",
   description: "Bannie un utilisateur du serveur !",
   message($askingUsername, $targetUsername) {
     return `${$askingUsername} souhaite bannir ${$targetUsername}.`;

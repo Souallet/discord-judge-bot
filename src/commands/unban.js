@@ -1,5 +1,6 @@
 module.exports = {
   name: "unban",
+  args: "@{nom d'utilisateur} {raison du vote}",
   description: "Supprime un utilisateur de la liste des bannis !",
   message($askingUsername, $targetUsername) {
     return `${$askingUsername} souhaite débannir ${$targetUsername}.`;
