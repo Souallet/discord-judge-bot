@@ -12,7 +12,7 @@ module.exports = {
     blacklist: ["ban", "unban", "kick"],
   },
   votes: {
-    min: 1,
+    min: process.env.MIN_VOTE_NUM || 5,
     duration: 60000,
     emojis: {
       pro: "👍",

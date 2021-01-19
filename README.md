@@ -42,6 +42,7 @@ npm i
 ##### Optionnal
 
 `DISCORD_BOT_PREFIX` : Prefix associated with the bot with which the commands should be started.
+`MIN_VOTE_NUM` : Minimal number of votes to execute the command.
 
 #### Config.js
 
