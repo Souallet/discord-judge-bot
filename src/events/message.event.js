@@ -21,8 +21,9 @@ module.exports = {
     const cmd = client.commands.get(COMMAND);
     if (!cmd) message.channel.send("Commande introuvable.");
 
-    // Si on demande l'aide
-    if (cmd.name == "help") return cmd.execute(client, message, args);
+    // Si on demande l'aide ou la config
+    if (["help", "config"].includes(cmd.name))
+      return cmd.execute(client, message, args);
 
     // Si des paramètres sont passés
     if (args.length === 0) {

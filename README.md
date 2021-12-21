@@ -13,6 +13,7 @@ The Discord Bot uses the `judge-` prefix for any commands by default; if you cha
 | Command           | Start vote | Arguments                 | Description                                 | Example                                                    |
 | ----------------- | ---------- | ------------------------- | ------------------------------------------- | ---------------------------------------------------------- |
 | `add-nickname`    | ✅         | @user new-nickname reason | Add a nickname to a user for the server     | `judge-add-nickname @user unknown Because nobody know him` |
+| `config`          | ❌         | None reason               | Print the configuration relating to votes   | `judge-config`                                             |
 | `deafen`          | ✅         | @user reason              | Make a user deaf                            | `judge-deafen @user He must not hear the following`        |
 | `disconnect`      | ✅         | @user reason              | Disconnect a user from the vocal channel    | `judge-disconnect @user He is to much toxic`               |
 | `help`            | ❌         | None reason               | Print help info and command usage           | `judge-help`                                               |
