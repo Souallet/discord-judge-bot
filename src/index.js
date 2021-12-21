@@ -11,6 +11,7 @@ const client = new Client();
 client.commands = new Collection();
 
 client.once("ready", () => {
+  client.user.setActivity("judge-help", { type: "PLAYING" });
   console.log(`${client.user.tag} has logged in.`);
 });
 
