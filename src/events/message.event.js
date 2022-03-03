@@ -2,6 +2,7 @@ const Discord = require("discord.js");
 const Config = require("../config/config");
 const { msToTime } = require("../utils/helpers/time.helper");
 const { updateCountdown } = require("../utils/helpers/message.helper");
+
 module.exports = {
   name: "message",
   async execute(client, message) {
@@ -157,11 +158,24 @@ module.exports = {
     });
 
     collector.on("end", (collected) => {
-      if (collected.size < Config.votes.min) {
+      const pros = collected.get(Config.votes.emojis.pro);
+      const cons = collected.get(Config.votes.emojis.con);
+
+      const prosUsers = pros?.users
+        ? [...pros?.users?.cache.filter((u) => u.bot === false).keys()]
+        : [];
+
+      const consUsers = cons?.users
+        ? [...cons?.users?.cache.filter((u) => u.bot === false).keys()]
+        : [];
+
+      const totalUsers = Array.from(
+        new Set(prosUsers.concat(consUsers))
+      ).length;
+
+      if (totalUsers < Config.votes.min) {
         message.reply("Il n'y a pas eu assez de votes.");
       } else {
-        const pros = collected.get(Config.votes.emojis.pro);
-        const cons = collected.get(Config.votes.emojis.con);
         const totalPros = typeof pros !== "undefined" ? pros.count : 1;
         const totalCons = typeof cons !== "undefined" ? cons.count : 1;
 
